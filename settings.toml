@@ -10,3 +10,7 @@ DB_PASS = "postgres"
 DB_PORT = 5432
 DB_NAME = "emprega_vale"
 DB_HOST = "localhost"
+
+ROUTES = [
+    "emprega_vale.auth.controllers:init_app"
+]
