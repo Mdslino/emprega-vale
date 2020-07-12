@@ -1,0 +1,12 @@
+[default]
+# APPLICATION SETTINGS
+HOST = "0.0.0.0"
+PORT = 8000
+DEBUG = true
+
+# DATABASE SETTINGS
+DB_USER = "postgres"
+DB_PASS = "postgres"
+DB_PORT = 5432
+DB_NAME = "emprega_vale"
+DB_HOST = "localhost"
