@@ -1,1 +1,2 @@
-from .login import Login, LoginCreate, LoginInDB, LoginUpdate
+from .user import User, UserCreate, UserInDB, UserUpdate
+from .login import Login, Token

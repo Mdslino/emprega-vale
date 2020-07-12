@@ -1,9 +1,9 @@
 SHELL := /bin/bash
 CURRENT_PATH := $(shell pwd)
 
-.PHONY: all make_migration migrate
+.PHONY: all migration migrate
 
-make_migration:
+migration:
 	PYTHONPATH=$(CURRENT_PATH) alembic revision --autogenerate
 
 migrate:

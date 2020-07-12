@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "emprega-vale"
 version = "0.1.0"
-description = ""
+description = "Portal de Emprego do Vale do Paraíba"
 authors = ["Marcelo Lino <mdslino@gmail.com>"]
 
 [tool.poetry.dependencies]

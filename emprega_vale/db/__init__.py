@@ -2,6 +2,6 @@
 # imported by Alembic
 from emprega_vale.db.base_class import Base
 from emprega_vale.models.group import Group
-from emprega_vale.models.login import Login
+from emprega_vale.models.auth import User
 
-__all__ = ['Group', 'Login', 'Base']
+__all__ = ['Group', 'User', 'Base']

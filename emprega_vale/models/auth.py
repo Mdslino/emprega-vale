@@ -10,11 +10,11 @@ if TYPE_CHECKING:
     from .group import Group  # noqa: F401
 
 
-class Login(Base):
-    email = Column(EmailType, nullable=False, index=True)
+class User(Base):
+    email = Column(EmailType, nullable=False, unique=True, index=True)
     password = Column(String(1024), nullable=False)
-    group_id = Column(Integer, ForeignKey('group.id'))
+    group_id = Column(Integer, ForeignKey('group.id'), nullable=False)
     group = relationship('Group', uselist=False, lazy='joined')
 
     def __str__(self):
-        return f'Login(id={self.id}, email={self.email}, group={self.group.name})'
+        return f'User(id={self.id}, email={self.email}, group={self.group.name})'

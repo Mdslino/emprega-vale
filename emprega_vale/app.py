@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from emprega_vale.config import settings as stg
-from emprega_vale.db import Base
-from emprega_vale.db.session import engine
+from emprega_vale.config import settings as stg, load_routes
 
 
 def create_app() -> FastAPI:
@@ -12,13 +10,13 @@ def create_app() -> FastAPI:
         title='Emprega Vale',
         description='Portal de Emprego da Região do Vale do Paraíba',
         version='1.0.0',
-        default_response_class=ORJSONResponse
+        default_response_class=ORJSONResponse,
     )
 
-    # load_routes(app)
+    load_routes(app)
 
     @app.get('/health-check')
-    def health_check():
+    async def health_check():
         return 'ok'
 
     return app
@@ -27,4 +25,4 @@ def create_app() -> FastAPI:
 if __name__ == '__main__':
     import uvicorn
 
-    uvicorn.run(create_app(), host=stg.HOST, port=stg.PORT, http='httptools', loop='uvloop')
+    uvicorn.run(create_app(), host=stg.HOST, port=stg.PORT, debug=stg.DEBUG)
