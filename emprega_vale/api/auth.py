@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
+from starlette import status
 
 from emprega_vale import schemas, crud
 from emprega_vale.api.dependencies import get_db
@@ -25,8 +26,12 @@ async def login_user(login: schemas.Login, db: Session = Depends(get_db)):
             access_token = create_token(user.uid)
             refresh_token = create_token(user.uid, timedelta(minutes=stg.JWT_REFRESH_EXPIRE_MINUTES))
 
-            return {'access_token': access_token, 'refresh_token': refresh_token}
-    raise HTTPException(401, 'Wrong Email or Password')
+            return {'access_token': access_token, 'refresh_token': refresh_token, 'token_type': 'Bearer'}
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail='Wrong Email or Password',
+        headers={'WWW-Authenticate': 'Bearer'},
+    )
 
 
 def init_app(app: FastAPI):
