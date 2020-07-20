@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
+from greenletio import async_
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -14,18 +15,17 @@ router = APIRouter()
 
 @router.post('/register', response_model=schemas.User, status_code=201)
 async def create_user(*, user_in: schemas.UserCreate, db: Session = Depends(get_db)):
-    user = crud.login.create(db, user_in)
+    user = await async_(crud.login.create)(db, user_in)
 
     return user
 
 
 @router.post('/login', response_model=schemas.Token, status_code=201)
 async def login_user(login: schemas.Login, db: Session = Depends(get_db)):
-    if user := crud.login.get_by_email(db, login.email):
+    if user := await async_(crud.login.get_by_email)(db, login.email):
         if verify_password(login.password, user.password):
             access_token = create_token(user.uid)
             refresh_token = create_token(user.uid, timedelta(minutes=stg.JWT_REFRESH_EXPIRE_MINUTES))
-
             return {'access_token': access_token, 'refresh_token': refresh_token, 'token_type': 'Bearer'}
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
