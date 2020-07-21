@@ -2,14 +2,23 @@ version: '3.8'
 
 services:
   emprega_backend:
-    container_name: emprega_backend
+    container_name: backend
     build:
-      context: .
+      context: backend
       dockerfile: Dockerfile
       args:
         environment: development
     ports:
       - 8000:80
+
+  emprega_front:
+    container_name: frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+
   database:
     container_name: database
     image: postgres:alpine
