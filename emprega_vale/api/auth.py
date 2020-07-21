@@ -22,7 +22,7 @@ async def create_user(*, user_in: schemas.UserCreate, db: Session = Depends(get_
 
 @router.post('/login', response_model=schemas.Token, status_code=201)
 async def login_user(login: schemas.Login, db: Session = Depends(get_db)):
-    if user := await async_(crud.login.get_by_email)(db, login.email):
+    if user := crud.login.get_by_email(db, login.email):
         if verify_password(login.password, user.password):
             access_token = create_token(user.uid)
             refresh_token = create_token(user.uid, timedelta(minutes=stg.JWT_REFRESH_EXPIRE_MINUTES))
