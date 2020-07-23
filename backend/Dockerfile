@@ -1,26 +1,25 @@
-FROM python:3.8.3-slim
+FROM golang:alpine AS builder
 
-WORKDIR /app
+RUN apk --no-cache add build-base git musl-dev
 
-LABEL maintainer="Marcelo Lino"
-LABEL email="mdslino@gmail.com"
+WORKDIR /src
 
-ARG environment
+COPY go.mod go.sum ./
 
-ENV ENV_FOR_DYNACONF=$environment \
-POETRY_VIRTUALENVS_CREATE=false \
-PIP_NO_CACHE_DIR=true
-
-RUN apt-get update && apt-get install --no-install-recommends -y curl && rm -rf /var/lib/apt/lists/*
-
-RUN pip --no-cache-dir install poetry
-
-COPY poetry.lock pyproject.toml ./
-
-RUN poetry install --no-dev
+RUN go mod download
 
 COPY . .
 
-EXPOSE 80
+RUN go build -o goapp
 
-CMD ["gunicorn", "--bind", "0.0.0.0:80","-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile=-", "--error-logfile=-", "emprega_vale.app:create_app()"]
+FROM alpine:latest
+
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+COPY --from=builder /src/goapp/ /app/
+
+EXPOSE 5000
+
+ENTRYPOINT ["./goapp"]

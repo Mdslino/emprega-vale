@@ -6,10 +6,18 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-      args:
-        environment: development
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: emprega_vale
+      SECRET: 87f86702ae92e490bd2d2ba2608edea663dcbd7f108052816d3a6d7a15e130b4
+      GIN_MODE: release
     ports:
-      - 8000:80
+      - 5000:5000
+    depends_on:
+      - database
 
   emprega_front:
     container_name: frontend
@@ -28,4 +36,3 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: emprega_vale
-      TZ: America/Sao_Paulo
