@@ -11,11 +11,10 @@ import (
 )
 
 type registerInput struct {
-	Email string `json:"email" binding:"required,email"`
+	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
-	Group string `json:"group" binding:"required"`
+	Group    string `json:"group" binding:"required"`
 }
-
 
 func Register(c *gin.Context) {
 	db := database.DB
@@ -23,7 +22,7 @@ func Register(c *gin.Context) {
 	var group models.Group
 
 	if err := c.ShouldBindJSON(&register); err != nil {
-		utils.RespondJson(c, 422, err)
+		utils.RespondJson(c, 422, utils.ListOfErrors(err))
 		return
 	}
 

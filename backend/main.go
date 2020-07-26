@@ -5,6 +5,7 @@ import (
 	"empregaVale/database"
 	"empregaVale/router"
 	"fmt"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"strconv"
@@ -29,6 +30,8 @@ func ConnectDB() {
 
 func main() {
 	ConnectDB()
+
+	binding.Validator = new(defaultValidator)
 
 	r := router.SetupRouter()
 
